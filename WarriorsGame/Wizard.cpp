@@ -1,15 +1,16 @@
 #include "Wizard.h"
 #include "RandomGen.h"
 
-Wizard::Wizard(std::string name, int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
+Wizard::Wizard(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
 {
 	RandomGen* randomGen = new RandomGen();
 
-	SetName(name);
-	SetWarriorClass("Hechicero");
+	this->name = "Wizard";
+	this->warriorType = WarriorType::Wizard;
+	
 	SetDamage(randomGen->RandomRange(minPossibleDamage, maxPossibleDamage));
 	SetHealth(randomGen->RandomRange(minPossibleHealth, maxPossibleHealth));
-	this->normalDamage = this->damage;
+	this->normalDamage = GetDamage();
 	this->critChance = 25;
 	this->critMultiplier = 2;
 	
@@ -33,11 +34,11 @@ bool Wizard::CheckCritSuccess()
 bool Wizard::Attack(Warrior* warrior)
 {
 	bool isCrit = CheckCritSuccess();
-	this->damage = this->normalDamage;
+	SetDamage(this->normalDamage);
 
 	if (isCrit)
 	{
-		this->damage *= this->critMultiplier;		
+		SetDamage(GetDamage() * this->critMultiplier);		
 	}
 	
 	Warrior::Attack(warrior);

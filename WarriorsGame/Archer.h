@@ -10,8 +10,7 @@ class Archer : public Warrior
 
 	public:
 
-		Archer(std::string name, int minPossibleDamage, 
-			int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth);
+		Archer(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth);
 
 		~Archer();
 

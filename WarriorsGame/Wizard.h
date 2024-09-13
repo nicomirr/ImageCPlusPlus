@@ -12,7 +12,7 @@ class Wizard : public Warrior
 
 	public:
 
-		Wizard(std::string name, int minPossibleDamage, int maxPossibleDamage, 
+		Wizard(int minPossibleDamage, int maxPossibleDamage, 
 			int minPossibleHealth, int maxPossibleHealth);
 
 		~Wizard();

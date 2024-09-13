@@ -13,7 +13,7 @@ class Tank : public Warrior
 
 	public:
 
-		Tank(std::string name, int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, 
+		Tank(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, 
 			int maxPossibleHealth, int minPossibleShield, int maxPossibleShield);
 
 		~Tank();

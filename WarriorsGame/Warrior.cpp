@@ -5,9 +5,9 @@
 Warrior::Warrior()
 {
 	this->name = "Null";
-	this->warriorClass = "Null";	
-	this->damage = 0;
-	this->health = 0;
+	this->warriorType = WarriorType::None;
+	this->damage = -1;
+	this->health = -1;
 }
 
 Warrior::~Warrior() {};
@@ -17,9 +17,9 @@ std::string Warrior::GetName()
 	return this->name; 
 }
 
-std::string Warrior::GetWarriorClass()
+WarriorType Warrior::GetWarriorType()
 {
-	return this->warriorClass;
+	return this->warriorType;
 }
 
 int Warrior::GetDamage() 
@@ -31,17 +31,6 @@ int Warrior::GetHealth()
 {
 	return this->health;
 }
-
-void Warrior::SetName(std::string name)
-{
-	this->name = name;
-}
-
-void Warrior::SetWarriorClass(std::string warriorClass)
-{
-	this->warriorClass = warriorClass;
-}
-
 
 void Warrior::SetDamage(int damage)
 {
@@ -61,7 +50,6 @@ void Warrior::ReceiveDamage(int damage)
 void Warrior::ShowStatistics() 
 {
 	std::cout << "Nombre: " << this->name << std::endl;
-	std::cout << "Clase: " << this->warriorClass << std::endl;
 	std::cout << "Danio: " << this->damage << std::endl;
 	std::cout << "Salud: " << this->health << std::endl << std::endl;
 
@@ -72,6 +60,13 @@ bool Warrior::Attack(Warrior* warrior)
 {
 	warrior->ReceiveDamage(this->damage);
 	return true;
+}
+
+void Warrior::operator+(const Warrior& warrior)
+{
+	this->name += warrior.name;
+	this->damage += warrior.damage;
+	this->health += warrior.health;
 }
 
 

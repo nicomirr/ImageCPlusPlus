@@ -4,13 +4,13 @@
 #include "RandomGen.h"
 
 
-Tank::Tank(std::string name, int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth,
+Tank::Tank(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth,
 			int minPossibleShield, int maxPossibleShield)
 {
 	RandomGen* randomGen = new RandomGen();
 	
-	SetName(name);
-	SetWarriorClass("Tanque");
+	this->name = "Tanque";
+	this->warriorType = WarriorType::Tank;
 	SetDamage(randomGen->RandomRange(minPossibleDamage, maxPossibleDamage));
 	SetHealth(randomGen->RandomRange(minPossibleHealth, maxPossibleHealth));
 	SetShield(randomGen->RandomRange(minPossibleShield, maxPossibleShield));
@@ -50,7 +50,7 @@ int Tank::UseShieldAgainstAttack(int damage)
 }
 
 
-void Tank::ReceiveDamage(int damage)
+void Tank::ReceiveDamage(int damage)	//cambiar el log a tanque bloqueo y no recibio daño en la clase game cpp?
 {
 	if (shield > 0)
 	{
@@ -69,24 +69,18 @@ void Tank::ReceiveDamage(int damage)
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 		shieldDestroyed = true;		
 	}
-	
-	this->health = damage > this->health ? 0 : this->health - damage;
+		
+	SetHealth(damage > GetHealth() ? 0 : GetHealth() - damage);
 
 }
 
 void Tank::ShowStatistics()
 {
 	std::cout << "Nombre: " << this->name << std::endl;
-	std::cout << "Clase: " << this->warriorClass << std::endl;
-	std::cout << "Danio: " << this->damage << std::endl;
-	std::cout << "Salud: " << this->health << std::endl;
-	std::cout << "Escudo: " << this->shield << std::endl << std::endl;
+	std::cout << "Danio: " << GetDamage() << std::endl;
+	std::cout << "Escudo: " << this->shield << std::endl;
+	std::cout << "Salud: " << GetHealth()  << std::endl;
 
 	std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
-
-/*
-
-
-*/

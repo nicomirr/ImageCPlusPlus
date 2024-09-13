@@ -2,17 +2,32 @@
 #include <iostream>
 
 
+//CREAR ENUM CLASS Y UN ATRIBUTO ENUM EN LUGAR DE STRING
+
+//CAMBIAR LOGICA DEL MAIN
+
+enum class WarriorType
+{
+	None = -1,
+	Tank,
+	Archer,
+	Wizard,
+	End = 3,
+};
+
+
 class Warrior
 {
-	protected:
+	private:
 
-		std::string name;
-		std::string warriorClass;		
 		int damage;		
 		int health;
 
-		void SetName(std::string name);
-		void SetWarriorClass(std::string warriorClass);
+	protected:
+
+		std::string name;		
+		WarriorType warriorType;
+				
 		void SetDamage(int damage);
 		void SetHealth(int health);
 
@@ -24,15 +39,13 @@ class Warrior
 		virtual ~Warrior();	//si es virtual puro ( = 0 ) es necesario override.
 
 		std::string GetName();
-		std::string GetWarriorClass();
+		WarriorType GetWarriorType();
 		int GetDamage();
 		virtual int GetHealth();		
 
 		virtual void ShowStatistics();	//si es virtual comun no es obligatorio override.
 		virtual bool Attack(Warrior* warrior);
 		
-
-
-
-
+		void operator+(const Warrior& warrior);
+		
 };

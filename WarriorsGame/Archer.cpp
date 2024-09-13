@@ -1,16 +1,17 @@
 #include "Archer.h"
 #include "RandomGen.h"
 
-Archer::Archer(std::string name, int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
+Archer::Archer(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
 {
 	RandomGen* randomGen = new RandomGen();
 
-	SetName(name);
-	SetWarriorClass("Arquero");
+	this->name = "Archer";
+	this->warriorType = WarriorType::Archer;
+		
 	SetDamage(randomGen->RandomRange(minPossibleDamage, maxPossibleDamage));
 	SetHealth(randomGen->RandomRange(minPossibleHealth, maxPossibleHealth));
 
-	this->normalDamage = this->damage;
+	this->normalDamage = GetDamage();
 	this->damageMultiplier = 2;
 
 	std::cout << "Arquero " << this->name << " creado." << std::endl;
@@ -39,10 +40,14 @@ bool Archer::Attack(Warrior* warrior)
 
 	if (isSuccessfulAttack)
 	{
-		this->damage = this->normalDamage;
-		damage *= damageMultiplier;
+		SetDamage(this->normalDamage);
+		SetDamage(GetDamage() * damageMultiplier);
 
 		Warrior::Attack(warrior);		
+	}
+	else
+	{
+		SetDamage(0);
 	}
 
 	return isSuccessfulAttack;

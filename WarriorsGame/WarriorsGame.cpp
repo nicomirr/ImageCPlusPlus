@@ -29,53 +29,7 @@ int main()
 	Gameloop();
 }
 
-void GenerateRandomWarriors()
-{
-	RandomGen* randomGen = new RandomGen();
-	int rand = randomGen->RandomRange(0,5);
 
-
-	switch (rand)
-	{
-		case 0:
-
-			warrior1 = new Tank("Aragorn", 3, 7, 40, 60, 10, 15);
-			warrior2 = new Archer("Legolas", 4, 7, 35, 50);
-			break;
-
-		case 1:
-
-			warrior1 = new Tank("Aragorn", 3, 7, 40, 60, 10, 15);
-			warrior2 = new Wizard("Gandalf", 8, 12, 30, 45);			
-			break;
-
-		case 2:
-
-			warrior1 = new Archer("Legolas", 4, 7, 35, 50);
-			warrior2 = new Wizard("Gandalf", 8, 12, 30, 45);
-			break;
-
-		case 3:
-
-			warrior1 = new Tank("Aragorn", 3, 7, 40, 60, 10, 15);
-			warrior2 = new Tank("Gimly", 3, 7, 40, 60, 10, 15);
-			break;
-
-		case 4:
-			
-			warrior1 = new Archer("Legolas", 4, 7, 35, 50);
-			warrior2 = new Archer("Aquiles", 4, 7, 35, 50);
-			break;
-
-		case 5:
-
-			warrior1 = new Wizard("Arthur", 8, 12, 30, 45);
-			warrior2 = new Wizard("Gandalf", 8, 12, 30, 45);
-			break;
-	}
-
-	delete randomGen;
-}
 
 void Gameloop()
 {
@@ -179,9 +133,7 @@ void Gameloop()
 void PrintBattleText(Warrior* warriorAttacker, Warrior* warriorReceiver, bool attackState)
 {
 	bool shieldActive;
-		
 	
-
 	if (warriorAttacker->GetWarriorClass() == "Tanque" || warriorAttacker->GetWarriorClass() == "Arquero" && attackState ||
 		warriorAttacker->GetWarriorClass() == "Hechicero" && !attackState)	//ATAQUE NORMAL
 	{
