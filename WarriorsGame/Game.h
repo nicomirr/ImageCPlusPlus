@@ -1,41 +1,54 @@
 #pragma once
+
 #define NOMINMAX
 
 #include <iostream>
 #include <thread>
 #include <chrono>
-#include <Windows.h>
 #include "Warrior.h"
 #include "Tank.h"
 #include "Archer.h"
 #include "Wizard.h"
 #include "RandomGen.h"
 
-class Game
+enum BattleMoment
+{
+	None = -1,
+	IdleMoment,
+	AttackMoment,
+	End = 2,
+};
+
+static class Game
 {
 	private:
 
-		Warrior* warriorGroup1 = nullptr;
-		Warrior* warriorGroup2 = nullptr;
+		static const int TOTAL_GROUPS = 2;
+		static const int WARRIORS_IN_GROUPS = 4;
 
-		Warrior* warriors1[5];
-		Warrior* warriors2[5];
+		static const int DRAWINGS_SPACING = 7;
+		static int drawingsCurrentHeight;
 
-		int normalTextColor = 7;
-		int failedTextColor = 128;
-		int critTextColor = 71;
-
-		void GenerateRandomWarriors();
-		void Gameloop();
-		void PrintBattleText(Warrior* attackers, Warrior* receivers, bool attackState);
+		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  
+				
+		static void InitGame(); 
+		static void ResetPointers();		
+		static void Gameloop();
+		static void GenerateRandomWarriors();
+		static void DisplayGroups();
+		/*static void PrintBattleText(Warrior* attackers, Warrior* receivers,
+			bool attackState);*/
+		static void Draw(Warrior* warriorAttacker, Warrior* warriorDefender,
+			bool attackerIsOnLeft, BattleMoment battleMoment, AttackState attackState,
+			bool showDamage);
+		//static void DeletePointers();
 
 	public:
 
 		Game();
 		virtual ~Game() = 0;
 
-		void InitGame(); //aca va el seed
-		void Play();
+		static void Play();
 
 
 

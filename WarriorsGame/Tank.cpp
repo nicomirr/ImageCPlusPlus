@@ -1,7 +1,9 @@
 #include <thread>
 #include <chrono>
+#include <iomanip>
 #include "Tank.h"
 #include "RandomGen.h"
+#include "CursorOptions.h"
 
 
 Tank::Tank(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth,
@@ -37,7 +39,16 @@ int Tank::GetShield()
 
 void Tank :: SetShield(int shield)
 {
-	this->shield = shield > 0 ? shield : 0;
+	if (shield < 0)
+	{
+		shield = 0;
+	}
+	else if (shield > 99)
+	{
+		shield = 99;
+	}
+
+	this->shield = shield;
 }
 
 int Tank::UseShieldAgainstAttack(int damage)
@@ -56,22 +67,23 @@ void Tank::ReceiveDamage(int damage)	//cambiar el log a tanque bloqueo y no reci
 	{
 		damage = UseShieldAgainstAttack(damage);
 
-		std::cout << "Escudo de " << this->name << " daniado!" << std::endl << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-		std::cout << "Puntos de vida restantes en escudo: " << this->shield << "." << std::endl << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		//std::cout << "Escudo de " << this->name << " daniado!" << std::endl << std::endl;
+		
+		//std::cout << "Puntos de vida restantes en escudo: " << this->shield << "." << std::endl << std::endl;
+		
 
 	}
 	
 	if (shield <= 0 && !shieldDestroyed)
 	{
-		std::cout << "Escudo de " << this->name << " destruido!" << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		//std::cout << "Escudo de " << this->name << " destruido!" << std::endl;
+		
 		shieldDestroyed = true;		
 	}
 		
 	SetHealth(damage > GetHealth() ? 0 : GetHealth() - damage);
-
+	
+	this->damageReceived = damage;
 }
 
 void Tank::ShowStatistics()
@@ -81,6 +93,428 @@ void Tank::ShowStatistics()
 	std::cout << "Escudo: " << this->shield << std::endl;
 	std::cout << "Salud: " << GetHealth()  << std::endl;
 
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+}
+
+void Tank::DrawWarriorIdle(bool isLeftSide, int yCursorPos)
+{
+	if (GetHealth() <= 0)
+	{
+		DrawWarriorDead(isLeftSide, yCursorPos);
+		return;
+	}
+
+	if (isLeftSide)
+	{
+
+		if (GetShield() > 0)
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _   |    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                            _|_| _|_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "    (_) |__| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |       ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _   |    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             |_| _|_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "      | |__| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |       ";
+		}
+		
+		
+	}
+	else
+	{
+		if (GetShield() > 0)
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |   _      ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "        _|_ |_|_    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |__| (_)   " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |     ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |   _      ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "        _|_ |_|     ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |__| |     " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |     ";
+		}
+		
+	}
+}
+
+void Tank::DrawWarriorAttack(bool isLeftSide, int yCursorPos)
+{
+	if (isLeftSide)
+	{
+		if (GetShield() > 0)
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                        ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                        ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _     /   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                            _|_|  _/_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "    (_) |__/ ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |        ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                        ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                        ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _     /   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             |_|  _/_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "      | |__/ ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |        ";
+		}
+		
+	}
+	else
+	{
+		if (GetShield() > 0)
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "       \\     _    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "       _\\_  |_|_  ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         \\__| (_)   " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |    ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "       \\     _    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "       _\\_  |_|     ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         \\__| |     " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |    ";
+		}
+
+		
+	}	
+}
+
+void Tank::DrawWarriorDamaged(bool isLeftSide, int yCursorPos, AttackState attackState)
+{
+	
+	if (isLeftSide)
+	{		
+		if (attackState == AttackState::Crit)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), critAttackColor);
+		}
+		else if (attackState == AttackState::Miss)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), missAttackColor);
+			damageReceived = 0;
+		}
+
+		if (GetShield() > 0)
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             -" << std::setfill('0') << std::setw(2) << damageReceived << "          ";
+			yCursorPos++;
+
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalAttackColor);
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _   |    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                            _|_| _|_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "    (_) |__| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |       ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                                       ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             -" << std::setfill('0') << std::setw(2) << damageReceived << "          ";
+			yCursorPos++;
+
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalAttackColor);
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                              _   |    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             |_| _|_   ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth() << "      | |__| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "             SHIELD: " << std::setfill('0') << std::setw(2) << GetShield() << "      |_| ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(0, yCursorPos);
+			std::cout << "                             | |       ";
+		}
+
+	}
+	else
+	{
+		if (attackState == AttackState::Crit)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), critAttackColor);
+		}
+		else if (attackState == AttackState::Miss)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), missAttackColor);
+			damageReceived = 0;
+		}
+
+		if (shield > 0)
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "           -" << std::setfill('0') << std::setw(2) << damageReceived << "          ";
+			yCursorPos++;
+
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalAttackColor);
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |   _      ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "        _|_ |_|_    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |__| (_)   " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |     ";
+		}
+		else
+		{
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "                    ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "           -" << std::setfill('0') << std::setw(2) << damageReceived << "          ";
+			yCursorPos++;
+
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalAttackColor);
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |   _      ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "        _|_ |_|     ";
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "         |__| |     " << "HEALTH: " << std::setfill('0') << std::setw(2) << GetHealth();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            |_|     SHIELD: " << std::setfill('0') << std::setw(2) << GetShield();
+			yCursorPos++;
+
+			CursorOptions::SetCursorPosition(xCursorPosDraw, yCursorPos);
+			std::cout << "            | |     ";
+		}
+
+		
+	}
 }
 

@@ -6,6 +6,15 @@
 
 //CAMBIAR LOGICA DEL MAIN
 
+enum class AttackState
+{
+	None = -1,
+	Normal,
+	Crit,
+	Miss,
+	End = 3,
+};
+
 enum class WarriorType
 {
 	None = -1,
@@ -23,7 +32,17 @@ class Warrior
 		int damage;		
 		int health;
 
+		bool displayDeadState = false;
+
+
 	protected:
+
+		int normalAttackColor = 7;
+		int missAttackColor = 11;
+		int critAttackColor = 12;
+
+		int damageReceived;
+		int xCursorPosDraw = 65;
 
 		std::string name;		
 		WarriorType warriorType;
@@ -41,11 +60,22 @@ class Warrior
 		std::string GetName();
 		WarriorType GetWarriorType();
 		int GetDamage();
-		virtual int GetHealth();		
+		virtual int GetHealth();	
+		bool GetDisplayDeadState();
+
+		void SetDisplayDeadState(bool state);
 
 		virtual void ShowStatistics();	//si es virtual comun no es obligatorio override.
-		virtual bool Attack(Warrior* warrior);
+
+		virtual void DrawWarriorIdle(bool isLeftSide, int yCursorPos);
+		virtual void DrawWarriorAttack(bool isLeftSide, int yCursorPos);
+		virtual void DrawWarriorDamaged(bool isLeftSide, int yCursorPos, 
+			AttackState attackState);
+
+		void DrawWarriorDead(bool isLeftSide, int yCursorPos);
+
+		virtual AttackState Attack(Warrior* warrior);
 		
-		void operator+(const Warrior& warrior);
+		Warrior operator+(const Warrior& warrior) const;
 		
 };

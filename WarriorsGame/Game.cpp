@@ -1,31 +1,37 @@
 #include "Game.h"
 
-Game::Game()
-{
-	for (int i = 0; i < 5; i++)
-	{
-		warriors1[i] = nullptr;
-	}
 
-	for (int i = 0; i < 5; i++)
-	{
-		warriors2[i] = nullptr;
-	}
+int Game::drawingsCurrentHeight;
 
-	
-}
-Game::~Game(){}
+Warrior* Game::warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];
+
+Game::Game(){ }
+
+Game::~Game(){ }
 
 void Game::InitGame()
 {
+	drawingsCurrentHeight = 0;
 	srand(time(NULL));
+}
+
+void Game::ResetPointers()
+{
+	for (int group = 0; group < TOTAL_GROUPS; group++)
+	{
+		for (int warrior = 0; warrior < WARRIORS_IN_GROUPS; warrior++)
+		{
+			warriorGroups[group][warrior] = nullptr;
+		}
+	}
 }
 
 void Game::Play()
 {
+	InitGame();
+	ResetPointers();
 	Gameloop();
 }
-
 
 void Game::GenerateRandomWarriors()
 {
@@ -33,220 +39,364 @@ void Game::GenerateRandomWarriors()
 	int totalClasses = static_cast<int>(WarriorType::End) - 1;
 	int rand = -1;
 
-	for (int i = 0; i < 5; i++)
+	for (int group = 0; group < TOTAL_GROUPS; group++)
 	{
-		rand = randomGen->RandomRange(0, totalClasses);
-		
-		switch (rand)
+		for (int warrior = 0; warrior < WARRIORS_IN_GROUPS; warrior++)
 		{
-			case 0:
+			rand = randomGen->RandomRange(0, totalClasses);
 
-				warriors1[i] = new Tank(5, 10, 100, 200, 20, 40);
-				break;
+			switch (rand)
+			{
+				case 0:
 
-			case 1:
+					warriorGroups[group][warrior] = new Tank(5, 10, 20, 30, 5, 10);
+					break;
 
-				warriors1[i] = new Archer(5, 10, 100, 200);
-				break;
+				case 1:
 
-			case 2:
+					warriorGroups[group][warrior] = new Archer(5, 10, 20, 30);
+					break;
 
-				warriors1[i] = new Wizard(5, 10, 100, 200);
-				break;
+				case 2:
 
-			default:
+					warriorGroups[group][warrior] = new Wizard(5, 10, 20, 30);
+					break;
 
-				break;
-		}
+				default:
 
-		rand = randomGen->RandomRange(0, totalClasses);
-
-		switch (rand)
-		{
-			case 0:
-
-				warriors2[i] = new Tank(5, 10, 100, 200, 20, 40);
-				break;
-
-			case 1:
-
-				warriors2[i] = new Archer(5, 10, 100, 200);
-				break;
-
-			case 2:
-
-				warriors2[i] = new Wizard(5, 10, 100, 200);
-				break;
-
-			default:
-
-				break;
-		}
+					break;
+			}
+		}		
 	}	
 
 	delete randomGen;
 	randomGen = nullptr;
 }
 
-void Game::Gameloop()
+void Game::DisplayGroups()
 {
-	GenerateRandomWarriors();
 
-	int battleOrder = rand() % 2;
-
-	bool inBattle = true;
-
-	bool attackState;
-
-	if (battleOrder == 0)
+	for (int group = 0; group < TOTAL_GROUPS; group++)
 	{
-		std::cout << "Comienza atacando el grupo 1." << std::endl;
+		Warrior warriorGroup;
 
-	}
-	else if (battleOrder == 1)
-	{
-		std::cout << "Comienza atacando el grupo 2." << std::endl;
-	}
-
-	int warriorGroup1Health = 0;
-	int warriorGroup2Health = 0;
-
-
-	while (inBattle)
-	{
-		warriorGroup1Health = 0;
-		warriorGroup2Health = 0;
-
-		if (battleOrder == 0)
+		for (int warrior = 0; warrior < WARRIORS_IN_GROUPS; warrior++)
 		{
-			for (int i = 0; i < 5; i++)
-			{
-				if (warriors1[i]->GetHealth() > 0)
-				{
-					attackState = warriors1[i]->Attack(warriors2[i]);
-					warriorGroup2Health += warriors2[i]->GetHealth();
-				}
-			}
-						
-			for (int i = 0; i < 5; i++)
-			{
-				if (warriorGroup2Health <= 0) return;
-
-				if (warriors2[i]->GetHealth() > 0)
-				{
-					attackState = warriors2[i]->Attack(warriors1[i]);
-					warriorGroup1Health += warriors1[i]->GetHealth();
-				}
-			}
-
-		}
-		else if (battleOrder == 1)
-		{
-			for (int i = 0; i < 5; i++)
-			{
-				if (warriors2[i]->GetHealth() > 0)
-				{
-					attackState = warriors2[i]->Attack(warriors1[i]);
-				}
-			}
-
-			for (int i = 0; i < 5; i++)
-			{
-				if (warriorGroup1Health <= 0) return;
-
-				if (warriors1[i]->GetHealth() > 0)
-				{
-					attackState = warriors1[i]->Attack(warriors2[i]);
-				}
-			}
+			warriorGroup = warriorGroup + *warriorGroups[group][warrior];
 		}
 
-		if (warriorGroup1->GetHealth() <= 0)
-		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalTextColor);
+		std::cout << "Grupo " << group + 1 << std::endl;
 
-			//Perdio grupo 1.
-
-			inBattle = false;
-		}
-		else if (warriorGroup2->GetHealth() <= 0)
-		{
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalTextColor);
-
-			//Perdio grupo 2.
-
-			inBattle = false;
-		}
+		std::cout << warriorGroup.GetName() << std::endl;
+		std::cout << warriorGroup.GetHealth() << std::endl;
+		std::cout << warriorGroup.GetDamage() << std::endl;
 
 		std::cin.get();
 
-		//FALTA HACER LOS NULLPTR
-		delete warriorGroup1;
-		delete warriorGroup2;
-		delete warriors1;
-		delete warriors2;
+	}
+}
 
+void Game::Gameloop() 
+{
+	GenerateRandomWarriors();
+	DisplayGroups();
 
-		system("cls");
-		int input = 0;
+	int firstAttackerGroup = rand() % TOTAL_GROUPS;
+	bool inBattle = true;
 
-		std::cout << "Simular nueva batalla ?" << std::endl;
-		std::cout << "1. Si." << std::endl;
-		std::cout << "2. No." << std::endl;
-		std::cin >> input;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	AttackState attackState = AttackState::None;	
+	
+    std::cout << "Comienza atacando el grupo " << firstAttackerGroup + 1 << "." << std::endl;
+	system("cls");
 
-		if (input == 1)
+	int aliveGroups = TOTAL_GROUPS;
+	int winnerGroup = 0;
+	int groupsThatHaveAttacked = 0;
+	int remainingWarriorsCurrentGroup = 0;
+	bool attackerOnLeft = true;
+
+	while (inBattle)
+	{
+		winnerGroup = 0;
+		groupsThatHaveAttacked = 0;
+		remainingWarriorsCurrentGroup = 0;
+
+		for (int currentAttackingGroup = firstAttackerGroup; 
+			currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
 		{
-			Gameloop();
+			drawingsCurrentHeight = 0;
+			int defenderGroup = currentAttackingGroup == (TOTAL_GROUPS - 1) ? 0 : currentAttackingGroup + 1;
+
+			for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
+			{
+				Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+					BattleMoment::IdleMoment, attackState, false);
+								
+				drawingsCurrentHeight += DRAWINGS_SPACING;
+			}
+
+			std::cin.get();
+			system("cls");
+
+			drawingsCurrentHeight = 0;
+
+			for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
+			{				
+				if (warriorGroups[currentAttackingGroup][currentWarrior]->GetHealth() > 0)
+				{					
+					if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() > 0)
+					{
+						Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+							BattleMoment::AttackMoment, attackState, false);
+					}
+					else if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() <= 0)
+					{
+						Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+							BattleMoment::IdleMoment, attackState, false);
+					}
+
+					attackState = warriorGroups[currentAttackingGroup][currentWarrior]->
+						Attack(warriorGroups[defenderGroup][currentWarrior]);
+
+					if (!warriorGroups[defenderGroup][currentWarrior]->GetDisplayDeadState())
+					{
+						Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+							BattleMoment::AttackMoment, attackState, true);
+
+						if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() <= 0)
+						{
+							warriorGroups[defenderGroup][currentWarrior]->SetDisplayDeadState(true);
+						}
+					}					
+
+					if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() > 0)
+					{
+						remainingWarriorsCurrentGroup++;
+					}
+				}
+				else
+				{
+					Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+						BattleMoment::IdleMoment, attackState, false);
+				}
+
+				drawingsCurrentHeight += DRAWINGS_SPACING;
+			}
+			
+			attackerOnLeft = !attackerOnLeft;
+
+			std::cin.get();
+			system("cls");
+			
+			winnerGroup = currentAttackingGroup + 1;
+			if (remainingWarriorsCurrentGroup == 0)
+			{
+				aliveGroups--;
+
+				if (aliveGroups == 1)
+				{
+					break;
+				}
+
+			}
+
+			groupsThatHaveAttacked++;
+
+			if (groupsThatHaveAttacked < TOTAL_GROUPS && currentAttackingGroup == (TOTAL_GROUPS - 1))
+			{
+				currentAttackingGroup = -1;
+			}								
+			
+			if (groupsThatHaveAttacked == TOTAL_GROUPS) break;
+		}
+			 
+		if (aliveGroups == 1)	
+		{
+			inBattle = false;
 		}
 
 	}
+						
+	std::cout << "Ha ganado el grupo " << winnerGroup << "." << std::endl;
+
+	std::cin.get();
+
+	//DeletePointers();	
+	
+	system("cls");
+	int input = 0;
+
+	std::cout << "Simular nueva batalla?" << std::endl;
+	std::cout << "1. Si." << std::endl;
+	std::cout << "2. No." << std::endl;
+	std::cin >> input;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	if (input == 1)
+	{
+		ResetPointers();
+		Gameloop();
+	}
+		
 }
 
-void Game::PrintBattleText(Warrior* warriorAttacker, Warrior* warriorReceiver, bool attackState)
+void Game::Draw(Warrior* warriorAttacker, Warrior* warriorDefender, bool attackerIsOnLeft, BattleMoment battleMoment, AttackState attackState, bool showDamage)
 {
-	bool shieldActive;
 
-	if (warriorAttacker->GetWarriorType() == WarriorType::Tank || warriorAttacker->GetWarriorType() == WarriorType::Archer && attackState ||
-		warriorAttacker->GetWarriorType() == WarriorType::Wizard && !attackState)	//ATAQUE NORMAL
+	if (battleMoment == BattleMoment::IdleMoment)
 	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalTextColor);
-
-		std::cout << "El " << warriorAttacker->GetName() << " ataca! Puntos de danio ejercidos: "
-			<< warriorAttacker->GetDamage() << "." << std::endl << std::endl;
-			
-		std::cout << "Puntos de vida restantes del " <<  warriorReceiver->GetName() << ": "
-			<< warriorReceiver->GetHealth() << "." << std::endl << std::endl;
-
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		warriorAttacker->DrawWarriorIdle(attackerIsOnLeft, drawingsCurrentHeight);
+		warriorDefender->DrawWarriorIdle(!attackerIsOnLeft, drawingsCurrentHeight);
+				
 	}
-	else if (warriorAttacker->GetWarriorType() == WarriorType::Archer && !attackState)	//ATAQUE NO EXITOSO
+	else if (battleMoment == BattleMoment::AttackMoment)
 	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), failedTextColor);
-		std::cout << "El " << warriorAttacker->GetName() << " ha fallado en su ataque!" << std::endl
-			<< std::endl;
+		warriorAttacker->DrawWarriorAttack(attackerIsOnLeft, drawingsCurrentHeight);
 
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		if (!warriorDefender->GetDisplayDeadState() && showDamage)
+		{
+			warriorDefender->DrawWarriorDamaged(!attackerIsOnLeft, drawingsCurrentHeight, attackState);
+		}
+		else
+		{
+			warriorDefender->DrawWarriorIdle(!attackerIsOnLeft, drawingsCurrentHeight);
+		}
 
 	}
-	else if (warriorAttacker->GetWarriorType() == WarriorType::Wizard && attackState)	//ATAQUE CRITICO
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), critTextColor);
 
-		std::cout << "El " << warriorAttacker->GetName() << " ataca! Daño critico! Puntos de daño ejercidos: " 
-			<< warriorAttacker->GetDamage() << "." << std::endl << std::endl;
-
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), normalTextColor);
-
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-
-		std::cout << "Puntos de vida restantes del " << warriorReceiver->GetName() << ": "
-			<< warriorReceiver->GetHealth() << "." << std::endl << std::endl;
-
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-
-	}
 }
 
+//void Game::DeletePointers()
+//{
+//	for (int i = 0; i < TOTAL_GROUPS; i++)
+//	{
+//		for (int j = 0; j < WARRIORS_IN_GROUPS; j++)
+//		{
+//			delete warriorGroups[i][j];
+//		}
+//
+//		delete[] warriorGroups[i];
+//	}
+//
+//}
 
+
+
+
+/*
+
+
+
+TANQUE IDLE RIGHT:
+
+     _   |
+   _|_| _|_
+  (_) |__|
+    |_|
+    | |
+
+TANQUE ATTACK RIGHT:
+
+	 _     /
+   _|_|  _/_
+  (_) |__/
+	|_|
+	| |
+
+TANQUE IDLE LEFT:
+
+    |   _   
+   _|_ |_|_ 
+    |__| (_)
+       |_|
+       | |
+
+
+
+
+TANQUE ATTACK LEFT:
+
+  \     _
+  _\_  |_|_
+    \__| (_)
+ 	   |_|
+       | |
+	
+
+ARQUERO IDLE RIGHT:
+
+    _
+   |_| |\
+   | |-||
+   |_| |/
+   | |
+
+ARQUERO ATTACK RIGHT:
+
+    _
+   |_| |\
+   | |-||  --->
+   |_| |/
+   / |
+
+ARQUERO IDLE LEFT:
+     
+          _
+      /| |_|
+      ||-| |
+      \| |_| 
+         | |
+	  
+ARQUERO ATTACK LEFT:
+
+          _
+      /| |_|
+ <--- ||-| |
+      \| |_|
+         | |
+	  
+HECHICERO IDLE RIGHT:
+
+    _    _ 
+   |_|  |
+  /| |\ |
+  ||_| \|
+   | |  |
+
+HECHICERO ATTACK RIGHT
+           _
+    _     /    
+   |_|   /    <*)
+  /| |\_/    
+  ||_| /
+   | |  
+
+HECHICERO IDLE LEFT:
+
+         _    _    
+          |  |_|  
+          | /| |\ 
+          |/ |_||
+          |  | |  
+
+HECHICERO ATTACK LEFT:
+       _
+        \     _
+  (*>    \   |_|
+          \_/| |\
+           \ |_||
+             | |
+           
+DEAD RIGHT:
+   
+  _________
+  __|___|__|
+
+DEAD LEFT:
+
+		   _________
+		  |__|___|__
+
+
+
+*/

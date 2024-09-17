@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="CursorOptions.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="RandomGen.cpp" />
     <ClCompile Include="Tank.cpp" />
@@ -137,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="CursorOptions.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="RandomGen.h" />
     <ClInclude Include="resource.h" />
