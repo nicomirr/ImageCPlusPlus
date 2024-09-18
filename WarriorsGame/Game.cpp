@@ -119,7 +119,6 @@ void Game::Gameloop()
 	{
 		winnerGroup = 0;
 		groupsThatHaveAttacked = 0;
-		remainingWarriorsCurrentGroup = 0;
 
 		for (int currentAttackingGroup = firstAttackerGroup; 
 			currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
@@ -165,21 +164,18 @@ void Game::Gameloop()
 
 						if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() <= 0)
 						{
+							groupPoints[currentAttackingGroup]++;
 							warriorGroups[defenderGroup][currentWarrior]->SetDisplayDeadState(true);
 						}
 					}					
-
-					if (warriorGroups[defenderGroup][currentWarrior]->GetHealth() > 0)
-					{
-						remainingWarriorsCurrentGroup++;
-					}
+										
 				}
 				else
 				{
 					Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
 						BattleMoment::IdleMoment, attackState, false);
 				}
-
+								
 				drawingsCurrentHeight += DRAWINGS_SPACING;
 			}
 			
@@ -189,14 +185,10 @@ void Game::Gameloop()
 			system("cls");
 			
 			winnerGroup = currentAttackingGroup + 1;
-			if (remainingWarriorsCurrentGroup == 0)
+			if (groupPoints[currentAttackingGroup] == WARRIORS_IN_GROUPS - 1)
 			{
-				aliveGroups--;
-
-				if (aliveGroups == 1)
-				{
-					break;
-				}
+				inBattle = false;
+				break;
 
 			}
 
@@ -209,12 +201,7 @@ void Game::Gameloop()
 			
 			if (groupsThatHaveAttacked == TOTAL_GROUPS) break;
 		}
-			 
-		if (aliveGroups == 1)	
-		{
-			inBattle = false;
-		}
-
+		
 	}
 						
 	std::cout << "Ha ganado el grupo " << winnerGroup << "." << std::endl;

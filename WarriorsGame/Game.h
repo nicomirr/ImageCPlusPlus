@@ -29,6 +29,7 @@ static class Game
 		static const int DRAWINGS_SPACING = 7;
 		static int drawingsCurrentHeight;
 
+		static int groupPoints[TOTAL_GROUPS];
 		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  
 				
 		static void InitGame(); 
