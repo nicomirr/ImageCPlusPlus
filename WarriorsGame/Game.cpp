@@ -32,7 +32,8 @@ void Game::Gameloop()
 	int firstAttackerGroup = rand() % TOTAL_GROUPS;
 	    
 	std::cout << "Comienza atacando el grupo " << firstAttackerGroup + 1 << "." << std::endl;
-	std::cin.get();
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+
 	system("cls");
 
 	AttackState attackState = AttackState::None;	
@@ -46,7 +47,7 @@ void Game::Gameloop()
 
 	DisplayIdleState(firstAttackerGroup, defenderGroup, attackerOnLeft, attackState);
 	
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 	system("cls");
 
 	bool inBattle = true;
@@ -57,6 +58,8 @@ void Game::Gameloop()
 			       inBattle, isTie);
 	}
 
+	std::cout << std::endl;
+
 	if (!isTie)
 	{
 		std::cout << "Ha ganado el grupo " << winnerGroup << "." << std::endl;
@@ -66,7 +69,7 @@ void Game::Gameloop()
 		std::cout << "Empate." << std::endl;
 	}
 
-	std::cin.get();
+	std::this_thread::sleep_for(std::chrono::seconds(4));
 
 	//DeletePointers();	
 	
@@ -142,7 +145,7 @@ void Game::DisplayGroups()
 
 		warriorGroup.ShowStatistics();
 
-		std::cin.get();
+		std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	}
 }
@@ -162,14 +165,14 @@ void Game::BattleState(int &winnerGroup, int &groupsThatHaveAttacked, int firstA
 
 		DisplayAttackState(defenderGroup, currentAttackingGroup, attackerOnLeft, attackState);
 
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 		system("cls");
 
 		DisplayIdleState(currentAttackingGroup, defenderGroup, attackerOnLeft, attackState);
 
 		attackerOnLeft = !attackerOnLeft;
 
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		CheckForWinners(winnerGroup, currentAttackingGroup, inBattle);
 		if (!inBattle) return;
