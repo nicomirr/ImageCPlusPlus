@@ -33,7 +33,8 @@ static class Game
 		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  
 				
 		static void InitGame(); 
-		static void ResetPointers();		
+		static void ResetPointers();
+		static void ResetPoints();
 		static void Gameloop();
 		static void GenerateRandomWarriors();
 		static void DisplayGroups();

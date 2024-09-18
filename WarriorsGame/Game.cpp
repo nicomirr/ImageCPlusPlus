@@ -3,6 +3,8 @@
 
 int Game::drawingsCurrentHeight;
 
+int Game::groupPoints[TOTAL_GROUPS];
+
 Warrior* Game::warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];
 
 Game::Game(){ }
@@ -23,6 +25,14 @@ void Game::ResetPointers()
 		{
 			warriorGroups[group][warrior] = nullptr;
 		}
+	}
+}
+
+void Game::ResetPoints()
+{
+	for (int i = 0; i < TOTAL_GROUPS; i++)
+	{
+		groupPoints[i] = 0;
 	}
 }
 
@@ -113,7 +123,27 @@ void Game::Gameloop()
 	int winnerGroup = 0;
 	int groupsThatHaveAttacked = 0;
 	int remainingWarriorsCurrentGroup = 0;
-	bool attackerOnLeft = true;
+	bool attackerOnLeft = true;	//Cuando se repite puede suceder que se cambien de lugar al principio.
+	
+	int defenderGroup;
+
+	//for (int currentAttackingGroup = firstAttackerGroup;
+	//	currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
+	//{
+	//	drawingsCurrentHeight = 0;
+	//	defenderGroup = currentAttackingGroup == (TOTAL_GROUPS - 1) ? 0 : currentAttackingGroup + 1;
+
+	//	for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
+	//	{
+	//		Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+	//			BattleMoment::IdleMoment, attackState, false);
+
+	//		drawingsCurrentHeight += DRAWINGS_SPACING;
+	//	}
+
+	//	std::cin.get();
+	//	system("cls");		
+	//}
 
 	while (inBattle)
 	{
@@ -123,22 +153,9 @@ void Game::Gameloop()
 		for (int currentAttackingGroup = firstAttackerGroup; 
 			currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
 		{
+			defenderGroup = currentAttackingGroup == (TOTAL_GROUPS - 1) ? 0 : currentAttackingGroup + 1;
 			drawingsCurrentHeight = 0;
-			int defenderGroup = currentAttackingGroup == (TOTAL_GROUPS - 1) ? 0 : currentAttackingGroup + 1;
-
-			for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
-			{
-				Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
-					BattleMoment::IdleMoment, attackState, false);
-								
-				drawingsCurrentHeight += DRAWINGS_SPACING;
-			}
-
-			std::cin.get();
-			system("cls");
-
-			drawingsCurrentHeight = 0;
-
+						
 			for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
 			{				
 				if (warriorGroups[currentAttackingGroup][currentWarrior]->GetHealth() > 0)
@@ -177,15 +194,27 @@ void Game::Gameloop()
 				}
 								
 				drawingsCurrentHeight += DRAWINGS_SPACING;
-			}
-			
-			attackerOnLeft = !attackerOnLeft;
+			}			
 
 			std::cin.get();
 			system("cls");
 			
+			drawingsCurrentHeight = 0;
+
+			for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
+			{
+				Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+					BattleMoment::IdleMoment, attackState, false);
+
+				drawingsCurrentHeight += DRAWINGS_SPACING;
+			}
+
+			attackerOnLeft = !attackerOnLeft;
+
+			std::cin.get();
+
 			winnerGroup = currentAttackingGroup + 1;
-			if (groupPoints[currentAttackingGroup] == WARRIORS_IN_GROUPS - 1)
+			if (groupPoints[currentAttackingGroup] >= WARRIORS_IN_GROUPS - 1)
 			{
 				inBattle = false;
 				break;
@@ -222,6 +251,7 @@ void Game::Gameloop()
 	if (input == 1)
 	{
 		ResetPointers();
+		ResetPoints();
 		Gameloop();
 	}
 		
