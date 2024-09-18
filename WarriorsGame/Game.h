@@ -47,7 +47,6 @@ static class Game
 		static void DisplayAttackState(int defenderGroup, int currentAttackingGroup, 
 			bool attackerOnLeft, AttackState attackState);
 
-		//static void BattleState();
 		static void DrawIdleOrDead(int currentAttackingGroup, int currentWarrior,
 						 int defenderGroup, bool attackerOnLeft, AttackState attackState);
 		static void DrawAttack(int currentAttackingGroup, int currentWarrior,
@@ -65,7 +64,7 @@ static class Game
 		static void PlayAgainQuestion();
 
 		static void ResetPoints();
-		//static void DeletePointers();
+		static void DeletePointers();
 
 	public:
 

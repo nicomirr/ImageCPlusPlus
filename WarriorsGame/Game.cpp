@@ -71,7 +71,7 @@ void Game::Gameloop()
 
 	std::this_thread::sleep_for(std::chrono::seconds(4));
 
-	//DeletePointers();	
+	DeletePointers();	
 	
 	PlayAgainQuestion();	
 		
@@ -372,19 +372,42 @@ void Game::ResetPoints()
 }
 
 
-//void Game::DeletePointers()
-//{
-//	for (int i = 0; i < TOTAL_GROUPS; i++)
-//	{
-//		for (int j = 0; j < WARRIORS_IN_GROUPS; j++)
-//		{
-//			delete warriorGroups[i][j];
-//		}
-//
-//		delete[] warriorGroups[i];
-//	}
-//
-//}
+void Game::DeletePointers()
+{
+	for (int i = 0; i < TOTAL_GROUPS; i++)
+	{
+		for (int j = 0; j < WARRIORS_IN_GROUPS; j++)
+		{
+			delete warriorGroups[i][j];
+		}
+
+		delete[] warriorGroups[i];
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
