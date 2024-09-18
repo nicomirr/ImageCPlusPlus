@@ -79,6 +79,8 @@ void Game::GenerateRandomWarriors()
 		}		
 	}	
 
+	system("cls");
+
 	delete randomGen;
 	randomGen = nullptr;
 }
@@ -105,6 +107,8 @@ void Game::DisplayGroups()
 	}
 }
 
+
+
 void Game::Gameloop() 
 {
 	GenerateRandomWarriors();
@@ -114,9 +118,7 @@ void Game::Gameloop()
 	bool inBattle = true;
 
 	AttackState attackState = AttackState::None;	
-	
-	system("cls");
-    
+	    
 	std::cout << "Comienza atacando el grupo " << firstAttackerGroup + 1 << "." << std::endl;
 
 	std::cin.get();
@@ -139,7 +141,7 @@ void Game::Gameloop()
 		defenderGroup = firstAttackerGroup == (TOTAL_GROUPS - 1) ? 0 : firstAttackerGroup + 1;
 
 		for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
-		{
+		{			
 			Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
 				BattleMoment::IdleMoment, attackState, false);
 

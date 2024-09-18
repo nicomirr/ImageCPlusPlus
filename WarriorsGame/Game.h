@@ -38,8 +38,6 @@ static class Game
 		static void Gameloop();
 		static void GenerateRandomWarriors();
 		static void DisplayGroups();
-		/*static void PrintBattleText(Warrior* attackers, Warrior* receivers,
-			bool attackState);*/
 		static void Draw(Warrior* warriorAttacker, Warrior* warriorDefender,
 			bool attackerIsOnLeft, BattleMoment battleMoment, AttackState attackState,
 			bool showDamage);
