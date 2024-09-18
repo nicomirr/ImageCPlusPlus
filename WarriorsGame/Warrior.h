@@ -1,10 +1,12 @@
-#pragma once	//ME FALTABA PRAGMA ONCE
+#pragma once	
+
 #include <iostream>
+#include <thread>
+#include <chrono>
+#include <iomanip>
+#include "CursorOptions.h"
 
 
-//CREAR ENUM CLASS Y UN ATRIBUTO ENUM EN LUGAR DE STRING
-
-//CAMBIAR LOGICA DEL MAIN
 
 enum class AttackState
 {

@@ -1,14 +1,11 @@
-#include <iomanip>
-#include <Windows.h>
 #include "Archer.h"
-#include "RandomGen.h"
-#include "CursorOptions.h"
+
 
 Archer::Archer(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
 {
 	RandomGen* randomGen = new RandomGen();
 
-	this->name = "Archer";
+	this->name = "Arquero";
 	this->warriorType = WarriorType::Archer;
 		
 	SetDamage(randomGen->RandomRange(minPossibleDamage, maxPossibleDamage));
@@ -282,9 +279,3 @@ AttackState Archer::Attack(Warrior* warrior)
 	return attackState;
 }
 
-/*
-
-PRAGMA ONCE:
-
-HACE QUE EL ARCHIVO SE COPIE UNA VEZ.
-*/

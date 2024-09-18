@@ -85,6 +85,7 @@ void Game::GenerateRandomWarriors()
 
 void Game::DisplayGroups()
 {
+	system("cls");
 
 	for (int group = 0; group < TOTAL_GROUPS; group++)
 	{
@@ -97,9 +98,7 @@ void Game::DisplayGroups()
 
 		std::cout << "Grupo " << group + 1 << std::endl;
 
-		std::cout << warriorGroup.GetName() << std::endl;
-		std::cout << warriorGroup.GetHealth() << std::endl;
-		std::cout << warriorGroup.GetDamage() << std::endl;
+		warriorGroup.ShowStatistics();
 
 		std::cin.get();
 
@@ -116,34 +115,42 @@ void Game::Gameloop()
 
 	AttackState attackState = AttackState::None;	
 	
-    std::cout << "Comienza atacando el grupo " << firstAttackerGroup + 1 << "." << std::endl;
+	system("cls");
+    
+	std::cout << "Comienza atacando el grupo " << firstAttackerGroup + 1 << "." << std::endl;
+
+	std::cin.get();
 	system("cls");
 
 	int aliveGroups = TOTAL_GROUPS;
 	int winnerGroup = 0;
 	int groupsThatHaveAttacked = 0;
 	int remainingWarriorsCurrentGroup = 0;
-	bool attackerOnLeft = true;	//Cuando se repite puede suceder que se cambien de lugar al principio.
+	bool attackerOnLeft = true;	
 	
 	int defenderGroup;
 
-	//for (int currentAttackingGroup = firstAttackerGroup;
-	//	currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
-	//{
-	//	drawingsCurrentHeight = 0;
-	//	defenderGroup = currentAttackingGroup == (TOTAL_GROUPS - 1) ? 0 : currentAttackingGroup + 1;
+	bool isTie = false;
 
-	//	for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
-	//	{
-	//		Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
-	//			BattleMoment::IdleMoment, attackState, false);
+	drawingsCurrentHeight = 0;
 
-	//		drawingsCurrentHeight += DRAWINGS_SPACING;
-	//	}
+	for (int currentAttackingGroup = firstAttackerGroup; currentAttackingGroup < TOTAL_GROUPS; currentAttackingGroup++)
+	{
+		defenderGroup = firstAttackerGroup == (TOTAL_GROUPS - 1) ? 0 : firstAttackerGroup + 1;
 
-	//	std::cin.get();
-	//	system("cls");		
-	//}
+		for (int currentWarrior = 0; currentWarrior < WARRIORS_IN_GROUPS; currentWarrior++)
+		{
+			Draw(warriorGroups[currentAttackingGroup][currentWarrior], warriorGroups[defenderGroup][currentWarrior], attackerOnLeft,
+				BattleMoment::IdleMoment, attackState, false);
+
+			drawingsCurrentHeight += DRAWINGS_SPACING;
+		}
+
+		break;
+	}	
+
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	system("cls");
 
 	while (inBattle)
 	{
@@ -196,7 +203,7 @@ void Game::Gameloop()
 				drawingsCurrentHeight += DRAWINGS_SPACING;
 			}			
 
-			std::cin.get();
+			std::this_thread::sleep_for(std::chrono::seconds(2));
 			system("cls");
 			
 			drawingsCurrentHeight = 0;
@@ -211,7 +218,7 @@ void Game::Gameloop()
 
 			attackerOnLeft = !attackerOnLeft;
 
-			std::cin.get();
+			std::this_thread::sleep_for(std::chrono::seconds(2));
 
 			winnerGroup = currentAttackingGroup + 1;
 			if (groupPoints[currentAttackingGroup] >= WARRIORS_IN_GROUPS - 1)
@@ -219,6 +226,24 @@ void Game::Gameloop()
 				inBattle = false;
 				break;
 
+			}
+			
+			int groupsWithHalfMembers = 0;
+			int halfMembers = WARRIORS_IN_GROUPS / 2;
+
+			for (int group = 0; group < TOTAL_GROUPS; group++)
+			{
+				if (groupPoints[group] == halfMembers)
+				{
+					groupsWithHalfMembers++;
+				}
+			}
+
+			if (groupsWithHalfMembers == TOTAL_GROUPS)
+			{
+				isTie = true;
+				inBattle = false;
+				break;
 			}
 
 			groupsThatHaveAttacked++;
@@ -232,8 +257,15 @@ void Game::Gameloop()
 		}
 		
 	}
-						
-	std::cout << "Ha ganado el grupo " << winnerGroup << "." << std::endl;
+
+	if (!isTie)
+	{
+		std::cout << "Ha ganado el grupo " << winnerGroup << "." << std::endl;
+	}
+	else
+	{
+		std::cout << "Empate." << std::endl;
+	}
 
 	std::cin.get();
 

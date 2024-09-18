@@ -1,9 +1,4 @@
-#include <thread>
-#include <chrono>
-#include <iomanip>
 #include "Tank.h"
-#include "RandomGen.h"
-#include "CursorOptions.h"
 
 
 Tank::Tank(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth,
@@ -61,22 +56,15 @@ int Tank::UseShieldAgainstAttack(int damage)
 }
 
 
-void Tank::ReceiveDamage(int damage)	//cambiar el log a tanque bloqueo y no recibio daño en la clase game cpp?
+void Tank::ReceiveDamage(int damage)	
 {
 	if (shield > 0)
 	{
 		damage = UseShieldAgainstAttack(damage);
-
-		//std::cout << "Escudo de " << this->name << " daniado!" << std::endl << std::endl;
-		
-		//std::cout << "Puntos de vida restantes en escudo: " << this->shield << "." << std::endl << std::endl;
-		
-
 	}
 	
 	if (shield <= 0 && !shieldDestroyed)
 	{
-		//std::cout << "Escudo de " << this->name << " destruido!" << std::endl;
 		
 		shieldDestroyed = true;		
 	}

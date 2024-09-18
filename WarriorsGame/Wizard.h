@@ -1,5 +1,11 @@
 #pragma once
+
+#include <iomanip>
+#include <Windows.h>
+#include "RandomGen.h"
+#include "CursorOptions.h"
 #include "Warrior.h"
+
 
 class Wizard : public Warrior
 {

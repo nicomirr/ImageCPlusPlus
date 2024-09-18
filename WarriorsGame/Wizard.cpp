@@ -1,14 +1,11 @@
-#include <iomanip>
-#include <Windows.h>
 #include "Wizard.h"
-#include "RandomGen.h"
-#include "CursorOptions.h"
+
 
 Wizard::Wizard(int minPossibleDamage, int maxPossibleDamage, int minPossibleHealth, int maxPossibleHealth)
 {
 	RandomGen* randomGen = new RandomGen();
 
-	this->name = "Wizard";
+	this->name = "Hechicero";
 	this->warriorType = WarriorType::Wizard;
 	
 	SetDamage(randomGen->RandomRange(minPossibleDamage, maxPossibleDamage));

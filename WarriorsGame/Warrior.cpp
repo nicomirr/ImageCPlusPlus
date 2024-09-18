@@ -1,8 +1,5 @@
-#include <thread>
-#include <chrono>
-#include <iomanip>
 #include "Warrior.h"
-#include "CursorOptions.h"
+
 
 Warrior::Warrior()
 {
@@ -155,7 +152,7 @@ AttackState Warrior::Attack(Warrior* warrior)
 Warrior Warrior::operator+(const Warrior& warrior) const
 {
 	Warrior result = *this;
-	result.name += warrior.name;
+	result.name += warrior.name + " ";
 	result.damage += warrior.damage;
 	result.health += warrior.health;
 

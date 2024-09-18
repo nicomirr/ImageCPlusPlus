@@ -1,5 +1,9 @@
 #pragma once
 #include <Windows.h>
+#include <thread>
+#include <iomanip>
+#include "RandomGen.h"
+#include "CursorOptions.h"
 #include "Warrior.h"
 
 
