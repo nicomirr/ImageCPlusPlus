@@ -34,7 +34,7 @@ class Warrior
 		int damage;		
 		int health;
 
-		bool displayDeadState = false;
+		bool displayDamagedState = true;
 
 
 	protected:
@@ -63,9 +63,9 @@ class Warrior
 		WarriorType GetWarriorType();
 		int GetDamage();
 		virtual int GetHealth();	
-		bool GetDisplayDeadState();
+		bool GetDisplayDamagedState();
 
-		void SetDisplayDeadState(bool state);
+		void SetDisplayDamagedState(bool state);
 
 		virtual void ShowStatistics();	//si es virtual comun no es obligatorio override.
 

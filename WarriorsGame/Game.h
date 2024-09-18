@@ -33,14 +33,38 @@ static class Game
 		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  
 				
 		static void InitGame(); 
-		static void ResetPointers();
-		static void ResetPoints();
 		static void Gameloop();
+
+		static void ResetPointers();
 		static void GenerateRandomWarriors();
 		static void DisplayGroups();
+
+		static void BattleState(int& winnerGroup, int& groupsThatHaveAttacked, int firstAttackerGroup, 
+			int defenderGroup, bool& attackerOnLeft, AttackState attackState, bool& inBattle, bool& isTie);
+
+		static void DisplayIdleState(int firstAttackerGroup, int defenderGroup,
+			bool attackerOnLeft, AttackState attackState);
+		static void DisplayAttackState(int defenderGroup, int currentAttackingGroup, 
+			bool attackerOnLeft, AttackState attackState);
+
+		//static void BattleState();
+		static void DrawIdleOrDead(int currentAttackingGroup, int currentWarrior,
+						 int defenderGroup, bool attackerOnLeft, AttackState attackState);
+		static void DrawAttack(int currentAttackingGroup, int currentWarrior,
+			int defenderGroup, bool attackerOnLeft, AttackState attackState, 
+			bool displayDamageDealth);
 		static void Draw(Warrior* warriorAttacker, Warrior* warriorDefender,
 			bool attackerIsOnLeft, BattleMoment battleMoment, AttackState attackState,
 			bool showDamage);
+
+		static void CheckForWinners(int& winnerGroup, int currentAttackingGroup, bool& inBattle);
+		static void CheckForTie(bool& isTie, bool& inBattle);
+
+		static void ResetCounterIfNeeded(int groupsThatHaveAttacked, int& currentAttackingGroup);
+
+		static void PlayAgainQuestion();
+
+		static void ResetPoints();
 		//static void DeletePointers();
 
 	public:

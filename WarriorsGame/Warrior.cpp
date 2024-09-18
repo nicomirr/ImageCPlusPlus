@@ -31,9 +31,9 @@ int Warrior::GetHealth()
 	return this->health;
 }
 
-bool Warrior::GetDisplayDeadState()
+bool Warrior::GetDisplayDamagedState()
 {
-	return this->displayDeadState;
+	return this->displayDamagedState;
 }
 
 void Warrior::SetDamage(int damage)
@@ -56,9 +56,9 @@ void Warrior::SetHealth(int health)
 	
 }
 
-void Warrior::SetDisplayDeadState(bool state)	//o enable sin parametro que solo lo haga true?
+void Warrior::SetDisplayDamagedState(bool state)	//o enable sin parametro que solo lo haga true?
 {
-	this->displayDeadState = state;
+	this->displayDamagedState = state;
 }
 
 void Warrior::ReceiveDamage(int damage) 
