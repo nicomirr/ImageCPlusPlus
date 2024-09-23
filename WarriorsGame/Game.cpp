@@ -378,17 +378,30 @@ void Game::DeletePointers()
 	{
 		for (int j = 0; j < WARRIORS_IN_GROUPS; j++)
 		{
-			delete warriorGroups[i][j];
+			if (warriorGroups[i][j] != nullptr)
+			{
+				delete warriorGroups[i][j];
+				warriorGroups[i][j] = nullptr;
+				
+			}
 		}
-
-		delete[] warriorGroups[i];
+				
 	}
 
 }
 
 
 
+/*
+ESTATICO => SE GUARDA EN STACK (SE ELIMINAN ELEMENTOS DEL ARRAY PERO NO ARRAY EN SI, NO SE PUEDE ELIMINAR LO ESTATICO (INT VAR[10].). No se 
+puede cambiar el 10, es estatico.
 
+DINAMICO => SE GUARDA EN HEAP. SE PUEDE Y DEBE ELIMINAR TODO EL ARRAY, NO SOLO ELEMENTOS (INT VAR = NEW INT[10]). Se puede cambiar valor 
+del 10. Si se cambia aparecen nuevos elementos.
+
+SI NO HACEMOS DELETE HAY MEMORY LEAK Y SE ENLENTECE EL PROGRAMA. NO SOLO ESO, TRAS FINALIZAR EL PROGRAMA LO QUE NO SE DELETEO SIGUE EN MEMORIA DANDO
+VUELTAS.
+*/
 
 
 

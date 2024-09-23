@@ -30,7 +30,7 @@ static class Game
 		static int drawingsCurrentHeight;
 
 		static int groupPoints[TOTAL_GROUPS];
-		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  
+		static Warrior* warriorGroups[TOTAL_GROUPS][WARRIORS_IN_GROUPS];  //DECLARACION ESTATICA
 				
 		static void InitGame(); 
 		static void Gameloop();
